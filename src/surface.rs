@@ -175,6 +175,16 @@ impl Surface {
     pub fn height(&self) -> Option<u32> {
         self.texture.as_ref().map(|tex| tex.height())
     }
+
+    /// Set the framebuffer size to the given width and height
+    ///
+    /// `width` must be less than the maximum framebuffer width given by [`glow::MAX_FRAMEBUFFER_WIDTH`]
+    /// and `height` must be less than the maximum framebuffer height given by [`glow::MAX_FRAMEBUFFER_HEIGHT`].
+    pub fn set_size(&mut self, width: u32, height: u32) {
+        if let Some(tex) = self.texture.as_mut() {
+            tex.set_image_as_framebuffer(None, width, height, ColorFormat::RGBA);
+        }
+    }
 }
 
 impl Drop for Surface {
