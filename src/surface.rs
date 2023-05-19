@@ -181,9 +181,14 @@ impl Surface {
     /// `width` must be less than the maximum framebuffer width given by [`glow::MAX_FRAMEBUFFER_WIDTH`]
     /// and `height` must be less than the maximum framebuffer height given by [`glow::MAX_FRAMEBUFFER_HEIGHT`].
     pub fn set_size(&mut self, width: u32, height: u32) {
-        if let Some(tex) = self.texture.as_mut() {
-            tex.set_image_as_framebuffer(None, width, height, ColorFormat::RGBA);
-        }
+        assert!(
+            self.is_bound(),
+            "the surface wasn't bound when set_size was called"
+        );
+        self.texture
+            .as_mut()
+            .expect("the surface wasn't attached to a texture")
+            .set_image_as_framebuffer(None, width, height, ColorFormat::RGBA);
     }
 }
 
